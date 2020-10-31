@@ -14,11 +14,11 @@ module.exports = {
       .use("url-loader")
       .loader("url-loader")
       .tap(options => {
-        options.esModule = false;
         if (!options) {
           options = {};
         }
-        options.limit = 10 * 1024;
+        options.esModule = false;
+        options.limit = true;
         return options;
       })
       .end();
@@ -28,6 +28,9 @@ module.exports = {
       .use("url-loader")
       .loader("url-loader")
       .tap(options => {
+        if (!options) {
+          options = {};
+        }
         options.esModule = false;
         options.limit = true;
         return options;
@@ -41,5 +44,6 @@ module.exports = {
     optimization: {
       splitChunks: false
     }
-  }
+  },
+  transpileDependencies: ["vuetify"]
 };
