@@ -1,23 +1,26 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import About from "../views/About"
+import Login from "../views/Login";
+import Menu from "../views/Menu";
+import Download from "@/views/Download";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home
+    name: "Login",
+    component: Login
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: About
+    path: "/menu",
+    name: "Menu",
+    component: Menu
+  },
+  {
+    path: "/download",
+    name: "Download",
+    component: Download
   }
 ];
 
