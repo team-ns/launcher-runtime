@@ -45,5 +45,13 @@ module.exports = {
       splitChunks: false
     }
   },
-  transpileDependencies: ["vuetify"]
+  transpileDependencies: ["vuetify"],
+  pluginOptions: {
+    i18n: {
+      locale: "ru",
+      fallbackLocale: "ru",
+      localeDir: "locales",
+      enableInSFC: false
+    }
+  }
 };
