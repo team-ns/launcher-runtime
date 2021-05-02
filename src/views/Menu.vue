@@ -92,27 +92,27 @@ export default {
     validSettings: true
   }),
   methods: {
-    logout: function() {
-      window.external.invoke(`"logout"`);
-      this.$router.push("/");
+    logout: async function() {
+      await window.rpc.notify("launcher", `logout`);
+      await this.$router.push("/");
     },
-    play: function() {
+    play: async function() {
       let json = {
         play: {
           profile: this.$store.state.profiles[this.selectedProfile].name
         }
       };
-      window.external.invoke(JSON.stringify(json));
+      await window.rpc.notify("launcher", json);
       this.$store.commit("load", this.$t("message.hash"));
     },
-    selectDir: function() {
-      window.external.invoke(`"selectGameDir"`);
+    selectDir: async function() {
+      await window.rpc.notify("launcher", `selectGameDir`);
     },
-    saveSettings: function() {
+    saveSettings: async function() {
       let json = {
         saveSettings: this.$store.state.settings
       };
-      window.external.invoke(JSON.stringify(json));
+      await window.rpc.notify("launcher", json);
       this.settingsSelected = false;
     }
   },

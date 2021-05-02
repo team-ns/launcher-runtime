@@ -65,8 +65,8 @@ export default {
           rememberMe: this.rememberMe
         }
       };
+      await window.rpc.notify("launcher", login);
       store.state.login = this.name;
-      window.external.invoke(JSON.stringify(login));
     }
   }
 };

@@ -33,7 +33,7 @@ export default {
   components: { Loading },
   created() {
     this.$store.commit("load", this.$t("message.connect"));
-    window.external.invoke(`"ready"`);
+    window.rpc.notify("launcher", `ready`).catch(() => {});
     this.$router.push("/").catch(() => {});
     eventBus.$on("login", () => {
       this.$router.push("/menu").catch(() => {});
@@ -46,6 +46,10 @@ export default {
 </script>
 
 <style>
+body::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   user-select: none;
   -ms-overflow-style: none;
