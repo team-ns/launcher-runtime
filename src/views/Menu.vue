@@ -69,8 +69,8 @@
                   :disabled="!validSettings"
                   type="submit"
                   color="success"
-                  >{{ $t("settings.apply") }}</v-btn
-                >
+                  >{{ $t("settings.apply") }}
+                </v-btn>
               </v-card-actions>
             </v-card-actions>
           </v-card>
@@ -81,6 +81,8 @@
 </template>
 
 <script>
+import { launcher } from "nslauncher-runtime-api";
+
 export default {
   name: "Menu",
   data: () => ({
@@ -89,33 +91,26 @@ export default {
     minRam: 0,
     maxRam: 2048,
     ramLabels: [],
-    validSettings: true
+    validSettings: true,
   }),
   methods: {
-    logout: async function() {
-      await window.rpc.notify("launcher", `logout`);
+    logout: async function () {
+      await launcher.logout();
       await this.$router.push("/");
     },
-    play: async function() {
-      let json = {
-        play: {
-          profile: this.$store.state.profiles[this.selectedProfile].name
-        }
-      };
-      await window.rpc.notify("launcher", json);
+    play: async function () {
+      const profileName = this.$store.state.profiles[this.selectedProfile].name;
       this.$store.commit("load", this.$t("message.hash"));
+      await launcher.play(profileName);
     },
-    selectDir: async function() {
-      await window.rpc.notify("launcher", `selectGameDir`);
+    selectDir: async function () {
+      await launcher.selectGameDir();
     },
-    saveSettings: async function() {
-      let json = {
-        saveSettings: this.$store.state.settings
-      };
-      await window.rpc.notify("launcher", json);
+    saveSettings: async function () {
+      await launcher.saveSettings(this.$store.state.settings);
       this.settingsSelected = false;
-    }
+    },
   },
-  created() {}
+  created() {},
 };
 </script>

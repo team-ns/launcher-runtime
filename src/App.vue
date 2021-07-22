@@ -26,22 +26,47 @@
 
 <script>
 import Loading from "@/views/Loading";
-import { eventBus } from "@/eventBus";
+import { event, launcher, system } from "nslauncher-runtime-api";
+import store from "./store";
+import i18n from "./i18n";
 
 export default {
   name: "App",
   components: { Loading },
   created() {
     this.$store.commit("load", this.$t("message.connect"));
-    window.rpc.notify("launcher", `ready`).catch(() => {});
-    this.$router.push("/").catch(() => {});
-    eventBus.$on("login", () => {
-      this.$router.push("/menu").catch(() => {});
+    system.getTotalRam().then((ram) => {
+      store.state.maxRam = ram;
     });
-    eventBus.$on("download", () => {
+    event.listen("startDownload", (size) => {
+      store.commit("close");
+      store.state.download.totalSize = size;
       this.$router.push("/download").catch(() => {});
     });
-  }
+    event.listen("hashing", () => {
+      store.commit("load", i18n.t("message.hash"));
+    });
+    launcher
+      .ready()
+      .then((result) => {
+        console.log(result);
+        store.commit("settings", result.settings);
+        if (result.profiles) {
+          store.commit("profiles", result.profiles);
+          store.commit("close");
+          this.$router.push("/menu").catch(() => {});
+        } else {
+          store.commit("close");
+          this.$router.push("/").catch(() => {});
+        }
+      })
+      .catch((error) => {
+        this.$router
+          .push("/")
+          .then(() => store.commit("error", error))
+          .catch(() => {});
+      });
+  },
 };
 </script>
 
@@ -54,6 +79,7 @@ body {
   user-select: none;
   -ms-overflow-style: none;
 }
+
 .background {
   background: url("./assets/background.jpg") center;
   background-size: cover;

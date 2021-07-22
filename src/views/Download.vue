@@ -23,9 +23,19 @@
 </template>
 
 <script>
+import { event } from "nslauncher-runtime-api";
+import store from "@/store";
+
 export default {
-  name: "Download"
+  name: "Download",
+  created() {
+    event.listen("downloadError", (error) => {
+      store.commit("error", error);
+    });
+    event.listen("download", (currentSize) => {
+      store.state.download.currentSize = currentSize;
+    });
+  },
 };
 </script>
-
 <style scoped></style>

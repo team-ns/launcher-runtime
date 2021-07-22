@@ -31,9 +31,9 @@
             </v-checkbox>
           </v-card-text>
           <v-card-actions>
-            <v-btn :disabled="!valid" type="submit" color="success">{{
-              $t("login.button")
-            }}</v-btn>
+            <v-btn :disabled="!valid" type="submit" color="success"
+              >{{ $t("login.button") }}
+            </v-btn>
           </v-card-actions>
         </v-form>
       </v-card>
@@ -43,6 +43,7 @@
 
 <script>
 import store from "../store";
+import { launcher } from "nslauncher-runtime-api";
 
 export default {
   name: "Login",
@@ -53,22 +54,26 @@ export default {
     valid: true,
     rules: {
       name: [],
-      password: []
-    }
+      password: [],
+    },
   }),
   methods: {
-    submit: async function() {
-      let login = {
-        login: {
-          login: this.name,
-          password: this.password,
-          rememberMe: this.rememberMe
-        }
-      };
-      await window.rpc.notify("launcher", login);
-      store.state.login = this.name;
-    }
-  }
+    submit: async function () {
+      try {
+        let result = await launcher.login(
+          this.name,
+          this.password,
+          this.rememberMe
+        );
+        store.state.login = this.name;
+        store.commit("profiles", result.profiles);
+        store.commit("close");
+        this.$router.push("/menu").catch(() => {});
+      } catch (e) {
+        store.commit("error", e);
+      }
+    },
+  },
 };
 </script>
 

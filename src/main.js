@@ -1,5 +1,3 @@
-import "core-js/stable";
-import "regenerator-runtime/runtime";
 import "typeface-roboto";
 import Vue from "vue";
 import App from "./App.vue";
@@ -18,5 +16,5 @@ new Vue({
   store,
   vuetify,
   i18n,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");

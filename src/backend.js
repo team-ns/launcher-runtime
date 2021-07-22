@@ -22,17 +22,17 @@ function settings(s) {
 }
 
 const download = {
-  wait: function() {
+  wait: function () {
     store.commit("load", i18n.t("message.hash"));
   },
-  updateSize: function(size) {
+  updateSize: function (size) {
     store.state.download.currentSize = size;
   },
-  setTotalSize: function(totalSize) {
+  setTotalSize: function (totalSize) {
     store.state.download.totalSize = totalSize;
     store.commit("close");
     eventBus.$emit("download");
-  }
+  },
 };
 
 export { logined, error, settings, ready, download };
